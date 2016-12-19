@@ -1,0 +1,58 @@
+package blocking.queue;
+
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ToastMatic {
+
+}
+
+class ToastQueue extends LinkedBlockingQueue<Toast> {
+}
+
+// 制作土司的线程
+class Toaster implements Runnable {
+
+	private ToastQueue toastQueue;
+	private static int count = 0;
+
+	public Toaster(ToastQueue toastQueue) {
+		this.toastQueue = toastQueue;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				Toast t = new Toast( count++ );
+				toastQueue.put( t );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "制作土司的过程被中断" );
+		}
+		System.out.println( "制作土司过程结束" );
+	}
+}
+
+class Butter implements Runnable {
+
+	@Override
+	public void run() {
+
+	}
+}
+
+class Jammer implements Runnable {
+
+	@Override
+	public void run() {
+
+	}
+}
+
+class Eater implements Runnable {
+
+	@Override
+	public void run() {
+
+	}
+}

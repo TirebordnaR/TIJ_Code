@@ -1,0 +1,13 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+public class PoolForSemaphore<T> {
+	private int size;
+	private List<T> items = new ArrayList<T>();
+
+	private volatile boolean[] checkedOut;
+	private Semaphore sem;
+}

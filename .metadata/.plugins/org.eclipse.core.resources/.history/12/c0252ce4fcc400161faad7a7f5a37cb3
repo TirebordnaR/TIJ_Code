@@ -1,0 +1,21 @@
+package deadlock;
+
+public class Chopsticks {
+
+	private boolean taken = false;
+
+	public synchronized void take() {
+		try {
+			while( taken )
+				wait();
+			taken = true;
+		} catch( InterruptedException e ) {
+			System.out.println( "chopstick interrupted" );
+		}
+	}
+	
+	public synchronized void drop(){
+		taken = false;
+		notifyAll();
+	}
+}

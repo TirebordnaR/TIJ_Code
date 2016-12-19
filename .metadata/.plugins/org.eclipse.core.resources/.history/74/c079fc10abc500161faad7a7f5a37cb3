@@ -1,0 +1,87 @@
+package newcomponent;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExchangerDemo {
+
+	public static final int SIZE = 10;
+
+	public static void main(String[] args) throws InterruptedException {
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		Exchanger<List<FatForSemaphore>> exchanger = new Exchanger<>();
+
+		List<FatForSemaphore> producerList = new CopyOnWriteArrayList<>();
+		List<FatForSemaphore> consumerList = new CopyOnWriteArrayList<>();
+
+		exec.execute( new Consumer( exchanger, consumerList ) );
+		exec.execute( new Consumer( exchanger, consumerList ) );
+		exec.execute( new Producer( exchanger, producerList ) );
+
+		Thread.sleep( 11 );
+		exec.shutdownNow();
+	}
+
+}
+
+class Producer implements Runnable {
+
+	private Exchanger<List<FatForSemaphore>> exchanger;
+	private List<FatForSemaphore> holder;
+
+	public Producer(Exchanger<List<FatForSemaphore>> exchanger, List<FatForSemaphore> holder) {
+		this.exchanger = exchanger;
+		this.holder = holder;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 生产东西
+				for( int i = 0; i < ExchangerDemo.SIZE; i++ ) {
+					FatForSemaphore f = new FatForSemaphore();
+					holder.add( f );
+					System.out.println( "生产：" + f );
+				}
+
+				holder = exchanger.exchange( holder );
+			}
+		} catch( InterruptedException e ) {
+			// 省略了一些必要的清理工作
+		}
+	}
+}
+
+class Consumer implements Runnable {
+
+	private Exchanger<List<FatForSemaphore>> exchanger;
+	private List<FatForSemaphore> holder;
+
+	public Consumer(Exchanger<List<FatForSemaphore>> exchanger, List<FatForSemaphore> holder) {
+		this.exchanger = exchanger;
+		this.holder = holder;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				holder = exchanger.exchange( holder );
+
+				// 消费接收到的数据(清空holder)
+				for( FatForSemaphore f : holder ) {
+					System.out.println( "消费：" + f );
+					holder.remove( f ); // 只有CopyOnWriteList等其他特殊的List才能在遍历的时候做修改
+				}
+			}
+		} catch( InterruptedException e ) {
+			// 省略了一些必要的清理工作
+		}
+	}
+}

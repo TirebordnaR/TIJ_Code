@@ -1,0 +1,35 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class PriorityBlockingQueueDemo {
+
+}
+
+class PriorityTask implements Runnable, Comparable<PriorityTask> {
+
+	private static int count = 0;
+	private final int id = count++;
+	private static Random rand = new Random( 67 );
+
+	// 记录创建的顺序,用于和实际顺序做比较
+	protected static List<DelayedTask> sequenceTasks = new ArrayList<>();
+	private final int priority;
+	
+	public PriorityTask(int priority) {
+		this.priority = priority;
+		sequenceTasks.add( this );
+	}
+
+	@Override
+	public int compareTo(PriorityTask o) {
+		return 0;
+	}
+
+	@Override
+	public void run() {
+	}
+
+}

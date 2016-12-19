@@ -1,0 +1,15 @@
+package blocking.queue;
+
+public class LiftOff implements Runnable{
+
+	private int countDown = 10;
+	private int count = 0;
+	private final int id = count++;	//线程id
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

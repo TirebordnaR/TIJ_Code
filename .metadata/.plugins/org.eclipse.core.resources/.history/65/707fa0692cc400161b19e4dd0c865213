@@ -1,0 +1,17 @@
+package terminate.garden;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 大门
+public class Entrance implements Runnable {
+
+	// 通过所有大门的总人数
+	private static Counter count = new Counter();
+	private List<Entrance> entrances = new ArrayList<Entrance>();
+
+	@Override
+	public void run() {
+
+	}
+}

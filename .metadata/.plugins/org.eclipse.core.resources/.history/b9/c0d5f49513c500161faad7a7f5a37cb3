@@ -1,0 +1,11 @@
+package newcomponent;
+
+public class CountDownLatchDemo {
+
+}
+
+class TaskPortion implements Runnable{
+	
+	private static int count = 0;
+	private final int id = count++;
+}

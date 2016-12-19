@@ -1,0 +1,20 @@
+package share.evenchecker;
+
+public class EvenGenerator extends IntGenerator {
+
+	private int value = 0;
+
+	@Override
+	public int next() {
+		++value;
+		++value;
+		return value;
+	}
+
+	public static void main(String[] args) {
+
+		// 测试EvenGenerator在多线程下生成的下一个数是不是偶数
+		IntGenerator g = new EvenGenerator();
+		EvenChecker.test( g );
+	}
+}

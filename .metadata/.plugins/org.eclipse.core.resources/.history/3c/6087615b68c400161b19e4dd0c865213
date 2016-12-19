@@ -1,0 +1,57 @@
+package interrupt;
+
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+
+// 在ReentranLock上阻塞的任务可以被中断,而在synchronized方法或者临界区上阻塞的任务则不能被中断
+public class ReentrantLockInterrupt {
+
+	public static void main(String[] args) throws Exception {
+
+		// new该任务的时候是在MAIN线程,因此MAIN线程首先拿到了lock
+		Runnable r = new Block2(); 
+		Thread t = new Thread( r );
+		t.start();
+
+		Thread.sleep( 1000 );
+		System.out.println( "MAIN : issuing t.interrupt()" );
+		t.interrupt();
+	}
+
+}
+
+class BlockedMutex {
+	private Lock lock = new ReentrantLock();
+
+	public BlockedMutex() {
+		// 获得锁,但是不释放锁
+		lock.lock();
+		System.out.println( "1" );
+		lock.lock();
+		System.out.println( "2" );
+	}
+
+	public void f() {
+		System.out.println( " befor " );
+		lock.lock();
+		System.out.println( "lock acquired in f()" );
+		/*
+		 * try { //lock.lockInterruptibly(); lock.lock(); System.out.println(
+		 * "lock acquired in f()" ); } catch( InterruptedException e ) {
+		 * System.out.println( "INT from lock acquisition in f()" ); }
+		 */
+	}
+}
+
+class Block2 implements Runnable {
+
+	// new这个对象时,该对象就得到了锁,但是一直没有释放
+	BlockedMutex blocked = new BlockedMutex();
+
+	@Override
+	public void run() {
+		System.out.println( "waiting for f() in BlockedMutex" );
+		blocked.f();
+		System.out.println( "Broken out of blocked call" );
+	}
+}

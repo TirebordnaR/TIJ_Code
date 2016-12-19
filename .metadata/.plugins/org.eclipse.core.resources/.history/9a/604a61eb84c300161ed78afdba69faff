@@ -1,0 +1,5 @@
+execute(Runnable command)
+	-->addWorker(command, false)
+		-->Worker w = null;
+           w = new Worker(firstTask);
+           final Thread t = w.thread;

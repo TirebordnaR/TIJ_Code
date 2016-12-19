@@ -1,0 +1,17 @@
+package deadlock;
+
+public class DeadLockPhilosophers {
+
+	public static void main(String[] args) {
+
+		int phoSize = 5; // 哲学家人数 = 筷子总数
+		int choSize = phoSize; // 筷子总数
+
+		Philosopher
+		Chopstick[] chops = new Chopstick[choSize];
+
+		for( int i = 0; i < choSize; i++ ) {
+
+		}
+	}
+}

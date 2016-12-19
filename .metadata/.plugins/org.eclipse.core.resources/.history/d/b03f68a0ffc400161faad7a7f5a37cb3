@@ -1,0 +1,26 @@
+package deadlock;
+
+public class DeadLockPhilosophers {
+
+	public static void main(String[] args) {
+
+		int phoSize = 5; // 哲学家人数 = 筷子总数
+		int choSize = phoSize; // 筷子总数
+		int factor = 2; // 影响因子,值越大,那么哲学家吃饭和思考需要的时间越大(统计上来说)
+
+		Philosopher[] phos = new Philosopher[phoSize];
+		Chopstick[] chops = new Chopstick[choSize];
+
+		for( int i = 0; i < choSize; i++ ) {
+			chops[i] = new Chopstick();
+		}
+
+		for( int i = 0; i < phoSize; i++ ) {
+			phos[i] = new Philosopher( chops[i], chops[(i + 1) % choSize], i, factor );
+			
+		}
+		
+		
+
+	}
+}

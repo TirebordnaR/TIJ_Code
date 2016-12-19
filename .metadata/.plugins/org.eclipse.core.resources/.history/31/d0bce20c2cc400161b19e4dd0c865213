@@ -1,0 +1,30 @@
+package terminate.garden;
+
+import java.util.Random;
+
+// 该计数器记录着通过所有大门的人数
+public class Counter {
+
+	// 计数器的值：通过所有大门的人数
+	private int count = 0;
+	private Random rand = new Random( 67 );
+
+	//
+	public synchronized int increment() {
+
+		int temp = count;
+
+		// 如果线程之间可能发生冲突,加大这种可能性
+		// 本质就是抛硬币,谁抛到正面就让出CPU
+		if ( rand.nextBoolean() )
+			Thread.yield();
+
+		count = ++temp;
+		return count;
+	}
+
+	// 返回通过大门的总人数
+	public synchronized int getCount() {
+		return count;
+	}
+}

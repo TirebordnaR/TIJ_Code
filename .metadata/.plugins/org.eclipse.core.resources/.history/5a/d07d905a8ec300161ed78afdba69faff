@@ -1,0 +1,32 @@
+package basic;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+
+// 后台线程是可有可无的,因此只要非后台线程都退出了,那么后台线程就被自动杀死
+public class SimpleDaemon implements Runnable {
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				TimeUnit.SECONDS.sleep( 1 );
+				System.out.println( Thread.currentThread() + ":" + this.toString() );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "sleep interrupted..." );
+		}
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		for( int i = 0; i < 4; i++ ) {
+			Thread daemon = new Thread( new SimpleDaemon() );
+			// 要想称为后台线程,必须在线程启动之前就设置为后台线程
+			daemon.setDaemon( true );
+			daemon.start();
+		}
+		System.out.println( "All daemons started" );
+		TimeUnit.SECONDS.sleep( 1 );
+		TimeUnit.MILLISECONDS.sleep( 200 );
+		System.out.println( "Main Thread is going die..." );
+	}
+}

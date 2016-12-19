@@ -1,0 +1,24 @@
+package share;
+
+public class SimpleThreadLocal implements Runnable {
+	private final int id;
+
+	public SimpleThreadLocal(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public void run() {
+		while( !Thread.currentThread().isInterrupted() ) {
+			ThreadLocalVarHolder.increment();
+		}
+	}
+}
+
+class ThreadLocalVarHolder {
+
+	public static void increment() {
+		
+	}
+
+}

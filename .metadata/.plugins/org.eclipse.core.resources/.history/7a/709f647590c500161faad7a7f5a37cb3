@@ -1,0 +1,18 @@
+package newcomponent;
+
+public class SemaphoreDemo {
+
+}
+
+class CheckOutInTask<T> implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+
+	private PoolForSemaphore<T> pool;
+
+	@Override
+	public void run() {
+
+	}
+}

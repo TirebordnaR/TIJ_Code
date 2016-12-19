@@ -1,0 +1,22 @@
+package blocking.queue;
+
+import java.io.PipedWriter;
+
+public class PipedIO {
+
+}
+
+
+class Sender implements Runnable{
+
+	private Random rand = new Random(67);
+	private PipedWriter pipe = new PipedWriter();
+	
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

@@ -1,0 +1,30 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PriorityBlockingQueueDemo {
+
+}
+
+class PriorityTask implements Runnable, Comparable<PriorityTask> {
+
+	private static int count = 0;
+	private final int id = count++;
+
+	// 记录创建的顺序,用于和实际顺序做比较
+	protected static List<DelayedTask> sequenceTasks = new ArrayList<>();
+
+	@Override
+	public int compareTo(PriorityTask o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

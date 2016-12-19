@@ -1,0 +1,15 @@
+package newcomponent;
+
+public class DelayQueueDemo {
+
+}
+
+class DealyedTask implements Runnable, Dealyed{
+
+	private static int count = 0;
+	private final int id = count++;
+	@Override
+	public void run() {
+		
+	}
+}

@@ -1,0 +1,20 @@
+package basic;
+
+import java.util.concurrent.TimeUnit;
+
+public class SimpleDaemon implements Runnable{
+
+	@Override
+	public void run() {
+		try{
+			while(true)
+			{
+				TimeUnit.SECONDS.sleep( 1 );
+				System.out.println( Thread.currentThread() + ":" + this.toString() );
+			}
+		}catch (InterruptedException e) {
+			// TODO: handle exception
+		}
+	}
+
+}

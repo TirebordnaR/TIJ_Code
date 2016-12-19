@@ -1,0 +1,26 @@
+package blocking.queue;
+
+public class LiftOff implements Runnable {
+
+	private int countDown = 10;
+	private int count = 0;
+	private final int id = count++; // 线程id
+
+	public LiftOff() {
+	}
+
+	public LiftOff(int countDown) {
+		this.countDown = countDown;
+	}
+
+	public String status(){
+		String s = (countDown > 0) ? countDown : "liftoff!";
+		return "#"+id+;
+	}
+
+	@Override
+	public void run() {
+
+	}
+
+}

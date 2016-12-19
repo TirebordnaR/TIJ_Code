@@ -1,0 +1,37 @@
+package share;
+
+public class SimpleThreadLocal implements Runnable {
+	private final int id;
+
+	public SimpleThreadLocal(int id) {
+		this.id = id;
+	}
+
+	@Override
+	public void run() {
+		while( !Thread.currentThread().isInterrupted() ) {
+			ThreadLocalVarHolder.increment();
+			System.out.println( id + ":" + ThreadLocalVarHolder.get() );
+			Thread.yield();
+		}
+	}
+}
+
+class ThreadLocalVarHolder {
+
+	private static int initValue = 0;
+	private static ThreadLocal<Integer> value = new ThreadLocal<Integer>() {
+		protected Integer initialValue() {
+			return ++initValue;
+		}
+	};
+
+	public static void increment() {
+		value.set( value.get() + 1 );
+	}
+
+	public static int get() {
+		return value.get();
+	}
+
+}

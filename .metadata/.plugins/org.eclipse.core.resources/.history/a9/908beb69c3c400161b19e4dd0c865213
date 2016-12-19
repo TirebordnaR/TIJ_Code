@@ -1,0 +1,20 @@
+package cooperate;
+
+public class Car {
+	
+	private boolean waxOn = false;
+	public synchronized void waxed(){
+		waxOn = true;
+		notifyAll();
+	}
+	
+	public synchronized void buffed(){
+		waxOn = false;
+		notifyAll();
+	}
+	
+	public synchronized void waitForBuffing(){
+		while(waxOn == true)
+			wait();
+	}
+}

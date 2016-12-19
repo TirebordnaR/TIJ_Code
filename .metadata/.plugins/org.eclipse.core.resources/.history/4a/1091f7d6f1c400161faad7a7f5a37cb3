@@ -1,0 +1,63 @@
+package blocking.queue;
+
+import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class BlockingQueueImpPipeIO {
+}
+
+class PipeQueue extends ArrayBlockingQueue<Integer> {
+	public PipeQueue(int capacity) {
+		super( capacity );
+	}
+}
+
+class SenderImpPipe implements Runnable {
+
+	private PipeQueue pipe; // 阻塞队列实现的Pipe
+	private Random rand = new Random( 67 );
+
+	public SenderImpPipe(PipeQueue pipe) {
+		this.pipe = pipe;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				for( int ch = 'a'; ch < 'z'; ch++ ) {
+					pipe.put( ch );
+					Thread.sleep( rand.nextInt( 500 ) );
+				}
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "write() interrupted" );
+		}
+		System.out.println( "sender exiting" );
+	}
+
+	public PipeQueue getPipe() {
+		return pipe;
+	}
+}
+
+class RecieverImpPipe implements Runnable {
+
+	private PipeQueue pipe; // 阻塞队列实现的Pipe
+	private SenderImpPipe sender;
+
+	public RecieverImpPipe(SenderImpPipe sender) {
+		this.pipe = sender.getPipe();
+	}
+
+	@Override
+	public void run() {
+		while( true ) {
+				Integer ch = pipe.take();
+				System.out.println( ch.toString() );
+			}
+		}
+	}
+}

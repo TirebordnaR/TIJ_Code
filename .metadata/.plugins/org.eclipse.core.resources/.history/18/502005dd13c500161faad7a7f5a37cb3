@@ -1,0 +1,23 @@
+package newcomponent;
+
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchDemo {
+
+}
+
+class TaskPortion implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+	private final CountDownLatch latch;
+
+	private static Random rand = new Random( 67 );
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+}

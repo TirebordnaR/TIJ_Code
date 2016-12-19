@@ -1,0 +1,54 @@
+package deadlock;
+
+import java.util.Random;
+
+public class Philosopher implements Runnable {
+
+	private Chopstick right;
+	private Chopstick left;
+	private final int id; // 哲学家ID
+	private int factor; // 一个影响因子,值越大思考的时间,统计上来说越大
+
+	private Random rand = new Random( 67 );
+
+	public Philosopher(Chopstick right, Chopstick left, int id, int factor) {
+		this.right = right;
+		this.left = left;
+		this.id = id;
+		this.factor = factor;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				System.out.println( this + " " + "准备思考..." );
+				thinking();
+				System.out.println( this + " " + "准备拿右边的筷子" );
+				right.take();
+				System.out.println( this + " " + "准备拿左边的筷子" );
+				left.take();
+				System.out.println( this + " " + "准备开吃~~~" );
+				eating();
+
+				// 吃完后放下筷子
+				right.drop();
+				left.drop();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Ph.D interrupted" );
+		}
+	}
+
+	// 哲学家在思考
+	public void thinking() throws InterruptedException {
+		if ( factor == 0 )
+			return;
+		Thread.sleep( rand.nextInt( factor ) );
+	}
+
+	// 哲学家在吃饭
+	public void eating() throws InterruptedException {
+		thinking();
+	}
+}

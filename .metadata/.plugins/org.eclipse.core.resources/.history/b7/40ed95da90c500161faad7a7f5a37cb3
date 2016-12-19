@@ -1,0 +1,35 @@
+package newcomponent;
+
+public class SemaphoreDemo {
+
+}
+
+class CheckOutInTask<T> implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+
+	private PoolForSemaphore<T> pool;
+
+	public CheckOutInTask(PoolForSemaphore<T> pool) {
+		this.pool = pool;
+	}
+
+	@Override
+	public void run() {
+		try {
+			T item = pool.checkedOut();
+			System.out.println( this + " checkedOut " + item );
+			Thread.sleep( 1000 );
+			System.out.println( this + " checking in " + item );
+			pool.checkedIn( item );
+		} catch( InterruptedException e ) {
+			// 这里需要写：一些清理资源等的代码,只要能正常退出即可
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "CheckOutTask " + id + " "
+	}
+}

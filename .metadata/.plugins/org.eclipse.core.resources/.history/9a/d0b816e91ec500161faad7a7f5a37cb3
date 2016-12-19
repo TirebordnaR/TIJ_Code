@@ -1,0 +1,113 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class CyclicBarrierDemo {
+
+	static final int TARGET_DISTANCE = 30; // 目标距离,马到达这个距离后就停止前进
+	static final long PAUSE_TIME = 100; // 200ms
+	private List<Horse> horses = new ArrayList<>();
+
+	private static ExecutorService exec = Executors.newCachedThreadPool();
+	private CyclicBarrier barrier;
+
+	public CyclicBarrierDemo(int horsesNumber) {
+
+		// 所有马都前进一次后,barrier要调用的动作
+		Runnable action = new HorseBarrierAction();
+		barrier = new CyclicBarrier( horsesNumber, action );
+
+		for( int i = 0; i < horsesNumber; i++ ) {
+			Horse h = new Horse( barrier );
+			horses.add( h );
+			exec.execute( h );
+		}
+	}
+
+	// 越过barrier后要调用的动作
+	class HorseBarrierAction implements Runnable {
+
+		@Override
+		public void run() {
+			StringBuilder s = new StringBuilder();
+			for( int i = 0; i < TARGET_DISTANCE; ++i ) {
+				s.append( "=" );
+			}
+			System.out.println( s );
+			for( Horse h : horses )
+				System.out.println( h.track() );
+			for( Horse h : horses ) {
+				if ( h.getDistance() >= TARGET_DISTANCE ) {
+					System.out.println( h + " WIN !" );
+					exec.shutdownNow();
+					return;
+				}
+			}
+
+			try {
+				Thread.sleep( PAUSE_TIME );
+			} catch( InterruptedException e ) {
+				System.out.println( "barrier-action sleep() interrupted" );
+			}
+			System.out.println( "barrier-action exit" );
+		}
+	}
+
+	public static void main(String[] args) {
+		new CyclicBarrierDemo( 10 );
+	}
+
+}
+
+class Horse implements Runnable {
+	private static int count = 0;
+	private final int id = count++;
+	private int distance = 0; // 马走过的距离
+
+	private static Random rand = new Random( 67 );
+	private static CyclicBarrier barrier;
+
+	public Horse(CyclicBarrier barrier) {
+		this.barrier = barrier;
+	}
+
+	public String track() {
+		StringBuilder s = new StringBuilder();
+		for( int i = 0; i < getDistance(); i++ ) {
+			s.append( "*" );
+		}
+		s.append( id );
+		return s.toString();
+	}
+
+	public synchronized int getDistance() {
+		return distance;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				synchronized( this ) {
+					distance += rand.nextInt( 3 );
+				}
+				barrier.await();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "normal exiting" );
+		} catch( BrokenBarrierException e ) {
+			throw new RuntimeException();
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Horse " + id + ":";
+	}
+}

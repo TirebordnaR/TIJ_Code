@@ -1,0 +1,37 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Delayed;
+import static java.util.concurrent.TimeUnit.*;
+
+public class DelayQueueDemo {
+
+}
+
+class DelayedTask implements Runnable, Delayed{
+
+	private static int count = 0;
+	private final int id = count++;
+	
+	private final int delta;	//距离任务发生的时间
+	private final long triggerTime;	//任务触发的时间
+	
+	protected static List<DelayedTask> sequenceTasks = new ArrayList<>();
+	
+	
+	
+	// 参数是距离要发生的时间有多少ms
+	public DelayedTask(int delayInMs) {
+		delta = delayInMs;
+		
+		triggerTime = System.nanoTime() + NANOSECONDS.convert( delayInMs,  ) 
+	}
+
+
+
+	@Override
+	public void run() {
+		
+	}
+}

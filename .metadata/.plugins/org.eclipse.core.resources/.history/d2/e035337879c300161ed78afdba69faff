@@ -1,0 +1,26 @@
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// 从任务中产生返回值
+// 只需要任务实现Callable<T>接口即可,必须用ExecutorService.submit()调用该任务
+public class CallableDemo {
+	public static void main(String[] args) {
+		ExecutorService exec = Executors.newCachedThreadPool();
+	}
+}
+
+class TaskWithResult implements Callable<String> {
+
+	private final int taskId;
+
+	public TaskWithResult(int id) {
+		this.taskId = id;
+	}
+
+	@Override
+	public String call() throws Exception {
+		return "result :" + taskId;
+	}
+
+}

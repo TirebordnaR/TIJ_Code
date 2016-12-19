@@ -1,0 +1,21 @@
+package interrupt;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// 对于因为IO而阻塞的线程,因为无法被中断,所以IO可能会锁住多线程程序
+// ①：可以关闭任务在IO上阻塞的底层资源
+// ②：可以考虑使用NIO,被阻塞的通道可以自动响应中断
+
+// 关闭资源来
+public class CloseResource {
+	public static void main(String[] args) throws IOException {
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		ServerSocket server = new ServerSocket( 8080 );
+		
+
+	}
+}

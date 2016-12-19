@@ -1,0 +1,50 @@
+package share.evenchecker;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class AttemptLocking {
+	private ReentrantLock lock = new ReentrantLock();
+
+	public void untimed() {
+		// tryLock()尝试获取锁,获取不到就返回
+		boolean captured = lock.tryLock();
+		try {
+			System.out.println( "tryLock() " + captured );
+		} finally {
+			if ( captured )
+				lock.unlock();
+		}
+	}
+
+	public void timed() {
+		// tryLock()尝试获取锁,获取不到就返回
+		boolean captured = false;
+		try {
+			captured = lock.tryLock( 2, TimeUnit.SECONDS );
+		} catch( InterruptedException e ) {
+			throw new RuntimeException();
+		}
+
+		try {
+			System.out.println( "tryLock( 2, TimeUnit.SECONDS ) " + captured );
+		} finally {
+			if ( captured )
+				lock.unlock();
+		}
+	}
+
+	public static void main(String[] args) {
+		AttemptLocking al = new AttemptLocking();
+		al.untimed();
+		al.timed();
+
+		new Thread() {
+			@Override
+			public void run() {
+				al.lock.lock();
+				System.out.println( "another thread lock...but not release lock" );
+			}
+		}.start();
+	}
+}

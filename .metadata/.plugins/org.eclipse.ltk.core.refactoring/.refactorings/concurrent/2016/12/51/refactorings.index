@@ -1,0 +1,20 @@
+1481883170448	Copy compilation unit
+1481883173963	Move compilation unit
+1481883178407	Delete element
+1481883242722	Rename compilation unit 'TaskWithResult.java'
+1481886213318	Move compilation unit
+1481886214980	Move compilation unit
+1481897406494	Copy package
+1481897409891	Delete elements
+1481897424715	Copy package
+1481897427085	Delete elements
+1481897476638	Rename package 'share'
+1481897480636	Delete element
+1481897487866	Delete element
+1481897827114	Rename method 'cancele'
+1481897949144	Rename field 'ident'
+1481897952774	Rename local variable 'ident'
+1481945162852	Rename package 'share.evenchecker'
+1481945290958	Delete element
+1481945565727	Rename field 'id'
+1481959801798	Rename package 'terminate.task'

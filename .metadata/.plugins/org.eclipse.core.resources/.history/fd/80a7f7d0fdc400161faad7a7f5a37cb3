@@ -1,0 +1,30 @@
+package deadlock;
+
+import java.util.Random;
+
+public class Philosopher implements Runnable {
+
+	private Chopsticks right;
+	private Chopsticks left;
+	private final int id; // 哲学家ID
+	private int factor; // 一个影响因子,值越大思考的时间,统计上来说越大
+
+	private Random rand = new Random( 67 );
+
+	public Philosopher(Chopsticks right, Chopsticks left, int id) {
+		this.right = right;
+		this.left = left;
+		this.id = id;
+	}
+
+	@Override
+	public void run() {
+
+	}
+
+	public void thinking() throws InterruptedException {
+		if ( factor == 0 )
+			return;
+		Thread.sleep( rand.nextInt( 500 ) );
+	}
+}

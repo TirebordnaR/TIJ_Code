@@ -1,0 +1,53 @@
+package newcomponent;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class SemaphoreDemo {
+	public static void main(String[] args) {
+
+		int POOL_SIZE = 5;
+		int THREAD_SIZE = 5;
+
+		final PoolForSemaphore<FatForSemaphore> pool = new PoolForSemaphore<>( FatForSemaphore.class, POOL_SIZE );
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		for( int i = 0; i < THREAD_SIZE; i++ ) {
+			exec.execute( new CheckOutInTask( pool ) );
+		}
+
+		System.out.println( "All checkedOutInTask created..." );
+		List<FatForSemaphore> fats = new ArrayList<>();
+		
+	}
+}
+
+class CheckOutInTask<T> implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+
+	private PoolForSemaphore<T> pool;
+
+	public CheckOutInTask(PoolForSemaphore<T> pool) {
+		this.pool = pool;
+	}
+
+	@Override
+	public void run() {
+		try {
+			T item = pool.checkedOut();
+			System.out.println( this + " checkedOut " + item );
+			Thread.sleep( 1000 );
+			System.out.println( this + " checking in " + item );
+			pool.checkedIn( item );
+		} catch( InterruptedException e ) {
+			// 这里需要写：一些清理资源等的代码,只要能正常退出即可
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "CheckOutTask " + id + " ";
+	}
+}

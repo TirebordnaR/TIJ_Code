@@ -1,0 +1,22 @@
+package interrupt;
+
+import java.net.Socket;
+import java.nio.channels.Channel;
+import java.nio.channels.SocketChannel;
+
+public class NIOInterruption {
+	
+}
+
+class NIOBlocked implements Runnable{
+	private final SocketChannel sc;
+	
+	public NIOBlocked(SocketChannel channel) {
+		this.sc = channel;
+	}
+
+	@Override
+	public void run() {
+		
+	}
+}

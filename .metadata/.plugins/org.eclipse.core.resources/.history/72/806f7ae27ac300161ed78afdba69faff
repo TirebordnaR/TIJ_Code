@@ -1,0 +1,38 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+// 从任务中产生返回值
+// 只需要任务实现Callable<T>接口即可,必须用ExecutorService.submit()调用该任务
+public class CallableDemo {
+	public static void main(String[] args) {
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		// submit()方法返回Future<T>对象
+		List<Future<String>> rs = new ArrayList<>();
+
+		for( int i = 0; i < 5; i++ ) {
+			TaskWithResult t = new TaskWithResult( i );
+			rs.add( exec.submit( t ) );
+		}
+	}
+}
+
+class TaskWithResult implements Callable<String> {
+
+	private final int taskId;
+
+	public TaskWithResult(int id) {
+		this.taskId = id;
+	}
+
+	@Override
+	public String call() throws Exception {
+		return "result :" + taskId;
+	}
+
+}

@@ -1,0 +1,19 @@
+package deadlock;
+
+public class Philosopher implements Runnable {
+
+	private Chopsticks right;
+	private Chopsticks left;
+	private final int id;
+
+	public Philosopher(Chopsticks right, Chopsticks left, int id) {
+		this.right = right;
+		this.left = left;
+		this.id = id;
+	}
+
+	@Override
+	public void run() {
+
+	}
+}

@@ -1,0 +1,39 @@
+package interrupt;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// 对于因为IO而阻塞的线程,因为无法被中断,所以IO可能会锁住多线程程序
+// ①：可以关闭任务在IO上阻塞的底层资源
+// ②：可以考虑使用NIO,被阻塞的通道可以自动响应中断
+
+// 关闭底层资源
+public class CloseResource {
+	public static void main(String[] args) throws Exception {
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		ServerSocket server = new ServerSocket( 8080 );
+		InputStream socketInput = new Socket( "localhost", 8080 ).getInputStream();
+
+		exec.execute( new IOBlocked( socketInput ) );
+		exec.execute( new IOBlocked( System.in ) );
+
+		Thread.sleep( 100 );
+		System.out.println( "shutdown all threads" );
+
+		// 强制产生interrupt
+		exec.shutdownNow();
+
+//		Thread.sleep( 1000 );// 1s
+//		System.out.println( "closing " + socketInput.getClass().getName() );
+//		socketInput.close(); // 释放掉阻塞在socketInput上的线程
+
+		Thread.sleep( 1000 );
+		System.out.println( "closing " + System.in.getClass().getName() );
+		System.in.close(); // 释放掉阻塞在System.in的线程
+	}
+}

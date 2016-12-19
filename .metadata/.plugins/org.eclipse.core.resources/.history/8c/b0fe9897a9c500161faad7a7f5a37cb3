@@ -1,0 +1,41 @@
+package newcomponent;
+
+import java.util.List;
+import java.util.concurrent.Exchanger;
+
+public class ExchangerDemo {
+
+	public static final int SIZE = 10;
+
+}
+
+class Producer implements Runnable {
+
+	private Exchanger<List<FatForSemaphore>> exchanger;
+	private List<FatForSemaphore> holder;
+
+	public Producer(Exchanger<List<FatForSemaphore>> exchanger, List<FatForSemaphore> holder) {
+		this.exchanger = exchanger;
+		this.holder = holder;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				
+				// 生产东西
+				for( int i = 0; i < ExchangerDemo.SIZE; i++ ) {
+					holder.add( new FatForSemaphore() );
+				}
+				
+				holder = exchanger.exchange( holder );
+				
+			}
+		} catch( InterruptedException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

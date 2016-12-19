@@ -1,0 +1,131 @@
+package cooperate;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.*;
+
+// 使用Lock/Condition对象实现线程协作
+// 对一个Car反复进行:打蜡-->抛光-->打蜡-->抛光.... 打蜡和抛光的顺序不能改变
+public class WaxOMatic2 {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		Car2 car = new Car2();
+		exec.execute( new WaxOff2( car ) );
+		exec.execute( new WaxOn2( car ) );
+
+		Thread.sleep( 5000 ); // 5s
+		exec.shutdownNow();
+	}
+}
+
+class Car2 {
+
+	// Car初始状态：抛光
+	private boolean waxOn = false;
+
+	private Lock lock = new ReentrantLock();
+	private Condition cond = lock.newCondition();
+
+	// 对Car进行打蜡
+	public void waxed() {
+		lock.lock();
+		try {
+			waxOn = true;
+			cond.signalAll();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	// 对Car进行抛光,回到初始状态
+	public void buffed() {
+		lock.lock();
+		try {
+			waxOn = false;
+			cond.signalAll();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	// 如果Car仍然处于抛光状态,那么就需要等待被打蜡
+	public void waitForWaxing() throws InterruptedException {
+		lock.lock();
+		try {
+			// await的时候释放该锁,让其他线程可以获得锁并执行
+			while( waxOn == false )
+				cond.await();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	// 如果Car仍然处理打蜡状态,那么就需要等待被抛光
+	public void waitForBuffing() throws InterruptedException {
+		lock.lock();
+		try {
+			// await的时候释放该锁,让其他线程可以获得锁并执行
+			while( waxOn == true )
+				cond.await();
+		} finally {
+			lock.unlock();
+		}
+	}
+}
+
+// 对Car进行打蜡
+class WaxOn2 implements Runnable {
+	private Car2 car;
+
+	public WaxOn2(Car2 car) {
+		this.car = car;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 只有抛光后才能继续打蜡
+				car.waitForBuffing();
+
+				System.out.println( "打蜡." );
+				Thread.sleep( 200 );// 200ms 打蜡过程
+				car.waxed();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Exiting via Interrupt" );
+		}
+		System.out.println( "Exiting via WaxOn.run()" );
+	}
+}
+
+// 对Car进行抛光
+class WaxOff2 implements Runnable {
+	private Car2 car;
+
+	public WaxOff2(Car2 car) {
+		this.car = car;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 只有先打蜡后才能进行抛光
+				car.waitForWaxing();
+
+				System.out.println( "抛光." );
+				Thread.sleep( 200 );// 200ms 抛光过程
+				car.buffed();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Exiting via Interrupt" );
+		}
+		System.out.println( "Exiting via WaxOn.run()" );
+	}
+}

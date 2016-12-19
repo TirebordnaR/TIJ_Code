@@ -1,0 +1,47 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+import javax.management.RuntimeErrorException;
+
+public class PoolForSemaphore<T> {
+
+	private int size;
+	private List<T> items = new ArrayList<T>();
+
+	private volatile boolean[] checkedOut;
+	private Semaphore sem;
+
+	public PoolForSemaphore(Class<T> classObject, int size) {
+		this.size = size;
+		checkedOut = new boolean[size];
+		sem = new Semaphore( size, true );
+		try {
+			for( int i = 0; i < size; i++ ) {
+				items.add( classObject.newInstance() );
+			}
+		} catch( InstantiationException | IllegalAccessException e ) {
+			throw new RuntimeException();
+		}
+	}
+
+	public T checkedOut() {
+		sem.acquire();
+		return getItem();
+	}
+
+	private synchronized T getItem() {
+		for( int i = 0; i < size; i++ ) {
+			if ( !checkedOut[i] ) {
+				checkedOut[i] = true;
+				return items.get( i );
+			}
+		}
+
+		//永远不会运行到这里,如果可以运行到这里表示一个编程错误
+		throw new RuntimeException( "FATAL ERROR" );
+		return null;
+	}
+}

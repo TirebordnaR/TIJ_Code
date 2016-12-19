@@ -1,0 +1,40 @@
+package blocking.queue;
+
+public class Toast {
+
+	// 土司的三种状态,DRY:刚出炉的土司,BUTTERED:刚出炉的土司上面加了黄油,JAMMED:加了黄油的土司上面加了果酱
+	private enum Status {
+		DRY, BUTTERED, JAMMED
+	}
+
+	private Status status = Status.DRY; // 土司的初始状态
+	private final int id; // 土司唯一的id号
+
+	public Toast(int id) {
+		this.id = id;
+	}
+
+	// 给土司上黄油
+	public void butter() {
+		status = Status.BUTTERED;
+	}
+
+	// 给土司上果酱
+	public void jam() {
+		status = Status.JAMMED;
+	}
+
+	// 返回土司的唯一标志
+	public int getId() {
+		return id;
+	}
+	
+	// 返回土司的状态
+	public int getStatus() {
+		return id;
+	}
+
+	public String toString() {
+		return "Toast" + id + ":" + status;
+	}
+}

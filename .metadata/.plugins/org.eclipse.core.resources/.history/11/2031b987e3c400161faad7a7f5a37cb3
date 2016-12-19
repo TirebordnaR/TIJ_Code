@@ -1,0 +1,51 @@
+package blocking.queue;
+
+import java.util.concurrent.BlockingQueue;
+
+public class SimpleBlockingQueues {
+
+	public static void test(BlockingQueue<LiftOff> q) {
+		
+		LiftOffRunner r = new LiftOffRunner( q );
+		Thread t = new Thread( r );
+		t.start();
+		
+		for( int i = 0; i < 5; i++ ) {
+			r.add( new LiftOff() );
+		}
+	}
+
+	public static void main(String[] args) {
+
+	}
+}
+
+class LiftOffRunner implements Runnable {
+
+	private BlockingQueue<LiftOff> rockets;
+
+	public LiftOffRunner(BlockingQueue<LiftOff> rockets) {
+		this.rockets = rockets;
+	}
+
+	public void add(LiftOff lo) {
+		try {
+			rockets.put( lo );
+		} catch( InterruptedException e ) {
+			System.out.println( "interrupt during put" );
+		}
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				LiftOff rocket = rockets.take();
+				rocket.run();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Waking from take()" );
+		}
+		System.out.println( "exiting run()" );
+	}
+}

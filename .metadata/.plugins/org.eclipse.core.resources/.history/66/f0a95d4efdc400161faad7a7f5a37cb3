@@ -1,0 +1,12 @@
+package deadlock;
+
+public class Philosopher implements Runnable {
+
+	Chopsticks right;
+	Chopsticks left;
+
+	@Override
+	public void run() {
+		
+	}
+}

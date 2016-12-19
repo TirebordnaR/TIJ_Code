@@ -1,0 +1,57 @@
+package share.evenchecker;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class EvenChecker implements Runnable {
+
+	private EvenGenerator g; // 数字生成器
+	private int id; // 线程id
+
+	public EvenChecker(EvenGenerator g, int id) {
+		this.g = g;
+		this.id = id;
+	}
+
+	@Override
+	public void run() {
+		while( !g.isCanceled() ) {
+			if ( id % 2 == 0 ) {
+				int val = g.next();
+				if ( val % 2 != 0 ) {
+					System.out.println( val + " not even &" + id );
+					g.cancel();
+				}
+			} else {
+				g.value = g.value + 2;
+				if ( id % 2 == 0 ) {
+					int val = g.next();
+					if ( val % 2 != 0 ) {
+						System.out.println( val + " not even #" + id );
+						g.cancel();
+					}
+				}
+			}
+		}
+	}
+
+	public static void test(EvenGenerator g, int threadCount) {
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		for( int i = 0; i < threadCount; i++ ) {
+			exec.execute( new EvenChecker( g, i ) );
+		}
+
+		// shudown并不是终止线程,仅仅是发出一个中断线程的信号
+		// 而且只能interrupt那些目前没有任务，处于等待状态从blockingQueue获取任务的thread
+		// 而不能interrupt那些在任务执行过程中的thread,或者是任务执行过程中挂起的thread
+		exec.shutdown();
+
+	}
+
+	// 默认开启10个EvenChecker线程测试
+	public static void test(EvenGenerator g) {
+		test( g, 10 );
+	}
+}

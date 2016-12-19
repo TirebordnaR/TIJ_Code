@@ -1,0 +1,11 @@
+package blocking.queue;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class BlockingQueueImpPipeIO {
+	BlockingQueue<E>
+}
+
+class PipeQueue extends LinkedBlockingQueue<Integer>{
+}

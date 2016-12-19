@@ -1,0 +1,19 @@
+package newcomponent;
+
+import java.util.concurrent.CyclicBarrier;
+
+public class Horse2 extends Horse {
+
+	public Horse2(CyclicBarrier barrier) {
+		super( barrier );
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void run() {
+
+		while( true ) {
+
+		}
+	}
+}

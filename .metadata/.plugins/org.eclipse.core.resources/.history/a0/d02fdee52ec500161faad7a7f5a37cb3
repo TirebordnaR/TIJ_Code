@@ -1,0 +1,97 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+
+public class PriorityBlockingQueueDemo {
+
+}
+
+class PriorityTaskProducer implements Runnable {
+
+	private static Random rand = new Random( 67 );
+	// 按优先级顺序存放任务的队列
+	private Queue<Runnable> q;
+	// 管理所有任务,给该队列的最后一个元素使用
+	private ExecutorService exec;
+
+	public PriorityTaskProducer(Queue<Runnable> q, ExecutorService exec) {
+		this.q = q;
+		this.exec = exec;
+	}
+
+	@Override
+	public void run() {
+		for( int i = 0; i < 20; i++ ) {
+			q.add( new PriorityTask( rand.nextInt( 10 ) ) );
+			Thread.yield();
+		}
+		
+		for( int i = 0; i < 10; i++ ) {
+			Thread.sleep( 250 );
+			q.add( new PriorityTask(  10  ) );
+				
+		}
+	}
+}
+
+class PriorityTask implements Runnable, Comparable<PriorityTask> {
+
+	private static int count = 0;
+	private final int id = count++;
+	private static Random rand = new Random( 67 );
+
+	// 记录创建的顺序,用于和实际顺序做比较
+	protected static List<PriorityTask> sequenceTasks = new ArrayList<>();
+	private final int priority;
+
+	public PriorityTask(int priority) {
+		this.priority = priority;
+		sequenceTasks.add( this );
+	}
+
+	@Override
+	public int compareTo(PriorityTask that) {
+		if ( this.priority < that.priority )
+			return -1;
+		if ( this.priority > that.priority )
+			return 1;
+		return 0;
+	}
+
+	@Override
+	public void run() {
+		try {
+			Thread.sleep( rand.nextInt( 250 ) );
+		} catch( InterruptedException e ) {
+			// 可接受的方式退出
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "[" + priority + " Task " + id + "]";
+	}
+
+	// 惯用方法,必须确保该任务是队列中最后一个元素,好对前面的任务进行管理
+	public static class EndSentinel extends PriorityTask {
+
+		private ExecutorService exec;
+
+		public EndSentinel(ExecutorService exec) {
+			super( -1 );
+			this.exec = exec;
+		}
+
+		@Override
+		public void run() {
+			for( PriorityTask t : sequenceTasks )
+				System.out.println( "创建队列顺序：" + t );
+			System.out.println( "Call shutdownNow() " + sequenceTasks.size() );
+			exec.shutdownNow();
+		}
+	}
+}

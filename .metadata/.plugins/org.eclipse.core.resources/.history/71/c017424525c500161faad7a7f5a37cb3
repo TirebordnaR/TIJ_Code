@@ -1,0 +1,24 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.concurrent.Delayed;
+
+public class DelayQueueDemo {
+
+}
+
+class DealyedTask implements Runnable, Delayed{
+
+	private static int count = 0;
+	private final int id = count++;
+	
+	private final int delta;	//距离任务发生的时间
+	private final long triggerTime;	//任务触发的时间
+	
+	protected static List<DelayedTask> sequenceTasks = new ArrayList<>();
+	
+	@Override
+	public void run() {
+		
+	}
+}

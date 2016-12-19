@@ -1,0 +1,8 @@
+execute(Runnable command)
+	-->addWorker(command, false)
+		-->Worker w = null;
+           w = new Worker(firstTask);
+				-->Worker(Runnable firstTask)
+					-->this.firstTask = firstTask;
+            		   this.thread = getThreadFactory().newThread(this);
+           final Thread t = w.thread;

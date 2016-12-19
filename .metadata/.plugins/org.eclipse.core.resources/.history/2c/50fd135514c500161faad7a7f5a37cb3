@@ -1,0 +1,70 @@
+package newcomponent;
+
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchDemo {
+
+}
+
+class TaskPortion implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+	private final CountDownLatch latch;
+
+	private static Random rand = new Random( 67 );
+
+	public TaskPortion(CountDownLatch latch) {
+		this.latch = latch;
+	}
+
+	@Override
+	public void run() {
+		try {
+			doSomeWork();
+			latch.countDown();
+		} catch( InterruptedException e ) {
+			System.out.println( "interrupted" );
+			// 有必要清理资源的话可以在这里清理
+		}
+
+	}
+
+	public void doSomeWork() throws InterruptedException {
+		// 随机睡眠以下模拟做了一些事情
+		Thread.sleep( rand.nextInt( 2000 ) );
+		System.out.println( id + "-->completed some work" );
+	}
+}
+
+class WaitingTask implements Runnable {
+
+	private static int count = 0;
+	private final int id = count++;
+	private final CountDownLatch latch;
+
+	private static Random rand = new Random( 67 );
+
+	public WaitingTask(CountDownLatch latch) {
+		this.latch = latch;
+	}
+
+	@Override
+	public void run() {
+		try {
+			latch.await();// 在这里阻塞,直到latch的值减少到0
+			doAnotherWork();
+		} catch( InterruptedException e ) {
+			System.out.println( "interrupted" );
+			// 有必要清理资源的话可以在这里清理
+		}
+
+	}
+
+	public void doAnotherWork() throws InterruptedException {
+		// 随机睡眠以下模拟做了一些事情
+		Thread.sleep( rand.nextInt( 2000 ) );
+		System.out.println( "Second: " + id + "-->completed some work" );
+	}
+}

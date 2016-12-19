@@ -1,0 +1,30 @@
+package blocking.queue;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class BlockingQueueImpPipeIO {
+}
+
+class PipeQueue extends LinkedBlockingQueue<Integer> {
+}
+
+class SenderImpPipe implements Runnable {
+
+	PipeQueue pipe; // 阻塞队列实现的Pipe
+
+	public SenderImpPipe(PipeQueue pipe) {
+		this.pipe = pipe;
+	}
+
+	@Override
+	public void run() {
+		while( true ) {
+			for( int ch = 'a'; ch < 'z'; ch++ ) {
+				pipe.put( ch );
+				Thread.sleep( rand.nextInt(500) );
+			}
+		}
+	}
+
+}

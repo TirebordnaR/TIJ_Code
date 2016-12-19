@@ -1,0 +1,36 @@
+package interrupt;
+
+import java.util.concurrent.TimeUnit;
+
+public class Interrupting {
+
+}
+
+// 因为sleep调用而进入的阻塞可以被中断
+class SleepBlocked implements Runnable {
+	@Override
+	public void run() {
+		try {
+			TimeUnit.SECONDS.sleep( 100 );
+		} catch( InterruptedException e ) {
+			System.out.println( "InterruptedException..." );
+		}
+		System.out.println( "exiting SleepBlocked run()..." );
+	}
+}
+
+class IOBlocked implements Runnable {
+
+	private InputStream in;
+
+	public IOBlocked(InputStream in) {
+		this.in = in;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

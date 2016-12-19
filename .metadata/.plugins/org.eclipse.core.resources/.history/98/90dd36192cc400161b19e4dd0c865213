@@ -1,0 +1,14 @@
+package terminate.garden;
+
+// 大门
+public class Entrance implements Runnable {
+
+	private static Count count = new Count();
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

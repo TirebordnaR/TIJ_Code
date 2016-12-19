@@ -1,0 +1,19 @@
+package newcomponent;
+
+public class DelayQueueDemo {
+
+}
+
+class DealyedTask implements Runnable, Dealyed{
+
+	private static int count = 0;
+	private final int id = count++;
+	
+	private final int delta;	//距离任务发生的时间
+	
+	
+	@Override
+	public void run() {
+		
+	}
+}

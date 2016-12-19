@@ -1,0 +1,10 @@
+import java.util.concurrent.Callable;
+
+// 从任务中产生返回值
+public class CallableDemo {
+	
+}
+
+class TaskWithResult implements Callable<String>{
+	
+}

@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+// 从任务中产生返回值
+// 只需要任务实现Callable<T>接口即可,必须用ExecutorService.submit()调用该任务
+public class CallableDemo {
+	public static void main(String[] args) {
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		// 任务完成时,submit()方法返回Future<T>对象
+		List<Future<String>> rs = new ArrayList<>();
+
+		for( int i = 0; i < 5; i++ ) {
+			TaskWithResult t = new TaskWithResult( i );
+			Future<String> f = exec.submit( t );
+			rs.add( f );
+		}
+
+		for( Future<String> f : rs ) {
+			try {
+				// 任务如果没有完成,get()方法会阻塞
+				// 可以调用isDone()来查询是否完成,还可以调用带超时的get()
+				String result = f.get();
+				System.out.println( result );
+			} catch( InterruptedException e ) {
+				e.printStackTrace();
+			} catch( ExecutionException e ) {
+				e.printStackTrace();
+			} finally {
+				exec.shutdown();
+			}
+		}
+	}
+}
+
+class TaskWithResult implements Callable<String> {
+
+	private final int taskId;
+
+	public TaskWithResult(int id) {
+		this.taskId = id;
+	}
+
+	@Override
+	public String call() throws Exception {
+		return "result :" + taskId;
+	}
+
+}

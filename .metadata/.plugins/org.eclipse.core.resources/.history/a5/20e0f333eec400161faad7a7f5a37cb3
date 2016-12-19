@@ -1,0 +1,20 @@
+package blocking.queue;
+
+import java.io.PipedWriter;
+
+public class PipedIO {
+
+}
+
+
+class Sender implements Runnable{
+
+	private PipedWriter pipe = new PipedWriter();
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

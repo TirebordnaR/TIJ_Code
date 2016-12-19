@@ -1,0 +1,9 @@
+package blocking.queue;
+
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ToastMatic {
+
+}
+
+class ToastQueue extends LinkedBlockingQueue<Toast>{};

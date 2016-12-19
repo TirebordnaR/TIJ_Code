@@ -1,0 +1,100 @@
+package cooperate;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// 对一个Car反复进行:打蜡-->抛光-->打蜡-->抛光.... 打蜡和抛光的顺序不能改变
+public class WaxOMatic {
+	public static void main(String[] args) throws InterruptedException {
+		Car car = new Car();
+		ExecutorService exec = Executors.newCachedThreadPool();
+
+		exec.execute( new WaxOff( car ) );
+		exec.execute( new WaxOn( car ) );
+
+		Thread.sleep( 5000 ); // 5s
+		exec.shutdownNow();
+	}
+}
+
+class Car {
+
+	// Car初始状态,抛光
+	private boolean waxOn = false;
+
+	// 对Car进行打蜡
+	public synchronized void waxed() {
+		waxOn = true;
+		notifyAll();
+	}
+
+	// 对Car进行抛光,回到初始状态
+	public synchronized void buffed() {
+		waxOn = false;
+		notifyAll();
+	}
+
+	public synchronized void waitForWaxing() throws InterruptedException {
+		while( waxOn == false )
+			wait();
+	}
+
+	public synchronized void waitForBuffing() throws InterruptedException {
+		while( waxOn == true )
+			wait();
+	}
+}
+
+// 对Car进行打蜡
+class WaxOn implements Runnable {
+	private Car car;
+
+	public WaxOn(Car car) {
+		this.car = car;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 只有抛光后才能继续打蜡
+				car.waitForBuffing();
+
+				System.out.println( "打蜡." );
+				Thread.sleep( 200 );// 200ms
+				car.waxed();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Exiting via Interrupt" );
+		}
+		System.out.println( "Exiting via WaxOn.run()" );
+	}
+}
+
+// 对Car进行抛光
+class WaxOff implements Runnable {
+	private Car car;
+
+	public WaxOff(Car car) {
+		this.car = car;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 只有先打蜡后才能进行抛光
+				car.waitForWaxing();
+
+				System.out.println( "抛光." );
+				Thread.sleep( 200 );// 200ms
+				car.buffed();
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Exiting via Interrupt" );
+		}
+		System.out.println( "Exiting via WaxOn.run()" );
+	}
+}

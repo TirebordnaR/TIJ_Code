@@ -1,0 +1,20 @@
+import java.util.concurrent.Callable;
+
+// 从任务中产生返回值
+// 只需要任务实现Callable<T>接口即可
+public class CallableDemo {
+
+}
+
+class TaskWithResult implements Callable<String> {
+
+	private final int taskId
+	public TaskWithResult(int id) {
+		
+	}
+	@Override
+	public String call() throws Exception {
+		return "result :" + id;
+	}
+
+}

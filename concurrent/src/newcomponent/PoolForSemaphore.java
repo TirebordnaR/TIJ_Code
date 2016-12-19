@@ -1,0 +1,64 @@
+package newcomponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+// 使用Semaphore允许多个任务同时访问该资源
+public class PoolForSemaphore<T> {
+
+	// 对象池的数量
+	private int size;
+	private List<T> items = new ArrayList<T>();
+
+	private volatile boolean[] checkedOut;
+	private Semaphore sem;
+
+	public PoolForSemaphore(Class<T> classObject, int size) {
+		this.size = size;
+		checkedOut = new boolean[size];
+		sem = new Semaphore( size, true );
+		try {
+			for( int i = 0; i < size; i++ ) {
+				items.add( classObject.newInstance() );
+			}
+		} catch( InstantiationException | IllegalAccessException e ) {
+			throw new RuntimeException();
+		}
+	}
+
+	public T checkedOut() throws InterruptedException {
+		sem.acquire();
+		return getItem();
+	}
+
+	public void checkedIn(T x) {
+		if ( releaseItem( x ) )
+			sem.release();
+	}
+
+	// 必须为synchronized
+	private synchronized boolean releaseItem(T x) {
+		int index = items.indexOf( x );
+		if ( index == -1 )
+			return false;
+		if ( checkedOut[index] ) {
+			checkedOut[index] = false;
+			return true;
+		}
+		return false;
+	}
+
+	// 必须为synchronized
+	private synchronized T getItem() {
+		for( int i = 0; i < size; i++ ) {
+			if ( !checkedOut[i] ) {
+				checkedOut[i] = true;
+				return items.get( i );
+			}
+		}
+
+		// 永远不会运行到这里,如果可以运行到这里表示一个编程错误
+		throw new RuntimeException( "FATAL ERROR" );
+	}
+}

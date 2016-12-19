@@ -1,0 +1,47 @@
+package blocking.queue;
+
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ToastMatic {
+
+}
+
+class ToastQueue extends LinkedBlockingQueue<Toast> {
+}
+
+// 制作土司的线程
+class Toaster implements Runnable {
+
+	
+	@Override
+	public void run() {
+
+	}
+}
+
+class Butter implements Runnable {
+
+	
+	@Override
+	public void run() {
+
+	}
+}
+
+class Toaster implements Runnable {
+
+	
+	@Override
+	public void run() {
+
+	}
+}
+
+class Toaster implements Runnable {
+
+	
+	@Override
+	public void run() {
+
+	}
+}

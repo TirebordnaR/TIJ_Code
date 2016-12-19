@@ -1,0 +1,15 @@
+package terminate.garden;
+
+// 每个大门
+public class Entrance implements Runnable {
+
+	// 通过所有大门的总人数
+	private static Count count = new Count();
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

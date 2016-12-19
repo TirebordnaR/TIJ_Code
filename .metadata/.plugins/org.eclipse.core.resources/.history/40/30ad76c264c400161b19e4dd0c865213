@@ -1,0 +1,10 @@
+package interrupt;
+
+// 在ReentranLock上阻塞的任务可以被中断,而在synchronized方法或者临界区上阻塞的任务则不能被中断
+public class ReentrantLockInterrupt {
+	
+}
+
+class BlockedMutex{
+	private Lock lock = new ReentrantLock();
+}

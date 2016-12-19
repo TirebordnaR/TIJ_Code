@@ -1,0 +1,111 @@
+package X;
+import java.util.concurrent.*;
+import java.util.concurrent.lock.*;
+
+class Car {
+	private Lock lock = new ReentrantLock();
+	// 获取线程锁的条件实例
+	private Condition condition = lock.newCondition();
+	private Boolean waxOn = false;
+
+	public void waxed() {
+		lock.lock();
+		try {
+			waxOn = true;
+			// 唤醒等待的线程
+			condition.signalAll();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public void buffed() {
+		lock.lock();
+		try {
+			waxOn = false;
+			// 唤醒等待的线程
+			condition.signalAll();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+public void waitForWaxing()throws InterruptedException{
+	lock.lock();
+	try{
+	while(waxOn == false){
+		//使当前线程处于等待状态
+	condition.await();
+}finally{
+	lock.unlock();
+}
+}
+}
+
+public void waitForBuffing()throws InterruptedException{
+	lock.lock();
+	try{
+	while(waxOn == true){
+		//使当前线程处于等待状态
+	condition.await();
+}finally{
+	lock.unlock();
+}
+}
+}
+}
+
+class WaxOn implements Runnable {
+	private Car car;
+
+	public WaxOn(Car c) {
+		car = c;
+	}
+
+public void run(){
+	try{
+	while(!Thread.interrupted()){
+	System.out.println(“Wax On!”);
+	TimeUnit.SECONDS.sleep(1);
+	car.waxed();
+	car.waitForBuffing();
+}
+}catch(InterruptedException e){
+	System.out.println(“Exiting via interrupt”);
+}
+System.out.println(“Ending Wax On task”);
+}
+}
+
+class WaxOff implements Runnable {
+	private Car car;
+
+	public WaxOff(Car c) {
+		car = c;
+	}
+
+public void run(){
+	try{
+	while(!Thread.interrupted()){
+		car.waitForWaxing();
+	System.out.println(“Wax Off!”);
+	TimeUnit.SECONDS.sleep(1);
+	car.buffed();
+}
+}catch(InterruptedException e){
+	System.out.println(“Exiting via interrupt”);
+}
+System.out.println(“Ending Wax Off task”);
+}
+}
+
+public class WaxOMatic {
+	public static void main(String[] args) throws Exception {
+		Car car = new Car();
+		ExecutorService exec = Executors.newCachedThreadPool();
+		exec.execute( new WaxOff( car ) );
+		exec.execute( new WaxOn( car ) );
+		TimeUnit.SECONDS.sleep( 5 );
+		exec.shutdownNow();
+	}
+}

@@ -1,0 +1,27 @@
+package terminate.garden;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// 大门
+public class Entrance implements Runnable {
+
+	// 通过所有大门的总人数
+	private static Counter count = new Counter();
+	// 记录下所有的大门
+	private List<Entrance> entrances = new ArrayList<Entrance>();
+
+	// 每个大门的计数器值
+	private int eachCount = 0;
+	// 大门标志,每个大门的id都不一样
+	private final int id;
+
+	// 是否取消所有大门的计数过程
+	// 由于对canceled只有赋值和读取操作,因此表示为volatile就可以实现同步互斥
+	private static volatile boolean canceled = false;
+
+	@Override
+	public void run() {
+
+	}
+}

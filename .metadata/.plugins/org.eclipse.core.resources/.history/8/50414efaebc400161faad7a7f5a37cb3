@@ -1,0 +1,150 @@
+package blocking.queue;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import blocking.queue.Toast.Status;
+
+public class ToastMatic {
+
+	public static void main(String[] args) throws InterruptedException {
+		ToastQueue toastQueue, butterQueue, jammerQueue;
+		toastQueue = new ToastQueue();
+		butterQueue = new ToastQueue();
+		jammerQueue = new ToastQueue();
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		exec.execute( new Toaster( toastQueue ) );
+		exec.execute( new Butter( toastQueue, butterQueue ) );
+		exec.execute( new Jammer( butterQueue, jammerQueue ) );
+		exec.execute( new Eater( jammerQueue ) );
+
+		Thread.sleep( 1000 );
+		exec.shutdownNow();
+	}
+}
+
+class ToastQueue extends LinkedBlockingQueue<Toast> {
+	private static final long serialVersionUID = 1L;
+}
+
+// 制作土司的任务
+class Toaster implements Runnable {
+
+	private ToastQueue toastQueue;
+	private static int count = 0;
+
+	public Toaster(ToastQueue toastQueue) {
+		this.toastQueue = toastQueue;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				Thread.sleep( 200 );
+				Toast t = new Toast( count++ );
+				toastQueue.put( t );
+				System.out.println( t );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "制作土司的过程被中断" );
+		}
+		System.out.println( "制作土司过程结束" );
+	}
+}
+
+// 给刚出炉的土司涂黄油的任务
+class Butter implements Runnable {
+
+	private ToastQueue toastQueue, butterQueue;
+
+	public Butter(ToastQueue toastQueue, ToastQueue butterQueue) {
+		this.toastQueue = toastQueue;
+		this.butterQueue = butterQueue;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				// 从刚出炉的土司队列中拿出土司,然后上黄油,最后插入到涂了黄油的队列中
+				Toast t = toastQueue.take();
+				if ( t.getStatus() != Toast.Status.DRY ) {
+					System.out.println( "不是刚出炉的土司 " + t );
+					System.exit( 1 );
+				}
+				t.butter();
+				butterQueue.put( t );
+				System.out.println( t );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "给刚出炉的土司上黄油过程被中断" );
+		}
+		System.out.println( "给刚出炉的土司上黄油过程结束" );
+	}
+}
+
+// 给涂了黄油的土司上果酱的任务
+class Jammer implements Runnable {
+
+	private ToastQueue butterQueue, jammerQueue;
+
+	public Jammer(ToastQueue butterQueue, ToastQueue jammerQueue) {
+		this.butterQueue = butterQueue;
+		this.jammerQueue = jammerQueue;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+				// 从涂了黄油的土司队列中拿出土司,然后上果酱,最后插入到同时上了果酱和黄油的队列中
+				Toast t = butterQueue.take();
+				if ( t.getStatus() != Status.BUTTERED ) {
+					System.out.println( "不是涂了黄油的土司:" + t );
+					System.exit( 1 );
+				}
+				t.jam();
+				jammerQueue.put( t );
+				System.out.println( t );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "上果酱过程被中断" );
+		}
+		System.out.println( "上果酱过程结束" );
+	}
+}
+
+// 消费上了果酱的土司任务
+class Eater implements Runnable {
+
+	private ToastQueue jammerQueue;
+	private int count = 0;
+
+	public Eater(ToastQueue jammerQueue) {
+		this.jammerQueue = jammerQueue;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( !Thread.interrupted() ) {
+
+				// 从涂了黄油的土司队列中拿出土司,然后上果酱,最后插入到同时上了果酱和黄油的队列中
+				Toast t = jammerQueue.take();
+				if ( t.getId() != count++ || t.getStatus() != Toast.Status.JAMMED ) {
+					System.out.println( "生产过程有错误！！！" );
+					System.exit( 1 );
+				}
+
+				System.out.println( "吃：" + t );
+				Thread.sleep( 200 );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "吃过程被中断" );
+		}
+		System.out.println( "吃过程结束" );
+	}
+}

@@ -1,0 +1,23 @@
+package basic;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class DaemonFromFactory implements Runnable {
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				TimeUnit.SECONDS.sleep( 1 );
+				System.out.println( Thread.currentThread() );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "Interrupted..." );
+		}
+	}
+
+	public static void main(String[] args) {
+		ExecutorService exec = Executors.newCachedThreadPool( new DaemonThreadFactory() );
+	}
+}

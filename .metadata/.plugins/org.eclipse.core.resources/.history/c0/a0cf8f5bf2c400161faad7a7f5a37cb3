@@ -1,0 +1,79 @@
+package blocking.queue;
+
+import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class BlockingQueueImpPipeIO {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		PipeQueue q = new PipeQueue( 10 );
+		SenderImpPipe s = new SenderImpPipe( q );
+		RecieverImpPipe r = new RecieverImpPipe( s );
+
+		ExecutorService exec = Executors.newCachedThreadPool();
+		exec.execute( s );
+		exec.execute( r );
+		Thread.sleep( 3000 );
+		exec.shutdownNow();
+	}
+}
+
+class PipeQueue extends ArrayBlockingQueue<Integer> {
+	public PipeQueue(int capacity) {
+		super( capacity );
+	}
+}
+
+class SenderImpPipe implements Runnable {
+
+	private PipeQueue pipe; // 阻塞队列实现的Pipe
+	private Random rand = new Random( 67 );
+
+	public SenderImpPipe(PipeQueue pipe) {
+		this.pipe = pipe;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				for( int ch = 'a'; ch < 'z'; ch++ ) {
+					pipe.put( ch );
+					Thread.sleep( rand.nextInt( 500 ) );
+				}
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "write() interrupted" );
+		}
+		System.out.println( "sender exiting" );
+	}
+
+	public PipeQueue getPipe() {
+		return pipe;
+	}
+}
+
+class RecieverImpPipe implements Runnable {
+
+	private PipeQueue pipe; // 阻塞队列实现的Pipe
+	private SenderImpPipe sender;
+
+	public RecieverImpPipe(SenderImpPipe sender) {
+		this.pipe = sender.getPipe();
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				Integer ch = pipe.take();
+				System.out.println( (char)ch );
+			}
+		} catch( InterruptedException e ) {
+			System.out.println( "read() interrupted" );
+		}
+	}
+}

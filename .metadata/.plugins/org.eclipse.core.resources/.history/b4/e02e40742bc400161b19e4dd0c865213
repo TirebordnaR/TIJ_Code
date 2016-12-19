@@ -1,0 +1,20 @@
+package terminate.garden;
+
+import java.util.Random;
+
+public class Counter {
+
+	private int count = 0;
+
+	private Random rand = new Random( 67 );
+
+	public synchronized int increment() {
+		int temp = count;
+
+		if ( rand.nextBoolean() )
+			Thread.yield();
+
+		count = ++temp;
+		return count;
+	}
+}

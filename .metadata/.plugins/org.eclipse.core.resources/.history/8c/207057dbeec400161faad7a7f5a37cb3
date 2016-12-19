@@ -1,0 +1,61 @@
+package blocking.queue;
+
+import java.io.IOException;
+import java.io.PipedWriter;
+import java.util.Random;
+
+public class PipedIO {
+
+}
+
+class Sender implements Runnable {
+
+	private Random rand = new Random( 67 );
+	private PipedWriter pipe = new PipedWriter();
+
+	public PipedWriter getPipe() {
+		return pipe;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				for( int ch = 'a'; ch < 'z'; ch++ ) {
+					pipe.write( (char) ch );
+					Thread.sleep( rand.nextInt( 500 ) );
+				}
+			}
+		} catch( IOException e ) {
+			System.out.println( "Sender write() exception" );
+		} catch( InterruptedException e ) {
+			System.out.println( "sender interrupted" );
+		}
+	}
+}
+
+class Reciever implements Runnable {
+
+	private PipedReader pipe = new PipedWriter();
+
+	public PipedWriter getPipe() {
+		return pipe;
+	}
+
+	@Override
+	public void run() {
+		try {
+			while( true ) {
+				for( int ch = 'a'; ch < 'z'; ch++ ) {
+					pipe.write( (char) ch );
+					Thread.sleep( rand.nextInt( 500 ) );
+				}
+			}
+		} catch( IOException e ) {
+			System.out.println( "Sender write() exception" );
+		} catch( InterruptedException e ) {
+			System.out.println( "sender interrupted" );
+		}
+	}
+
+}

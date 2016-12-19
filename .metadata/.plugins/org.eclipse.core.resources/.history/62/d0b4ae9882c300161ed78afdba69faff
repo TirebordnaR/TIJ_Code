@@ -1,0 +1,14 @@
+package basic;
+
+public class DaemonFromFactory implements Runnable {
+
+	@Override
+	public void run() {
+		try{
+			while(true)
+			{
+				
+			}
+		}
+	}
+}

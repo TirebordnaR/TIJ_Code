@@ -1,0 +1,5 @@
+package newcomponent;
+
+public class Horse2 extends Horse {
+
+}

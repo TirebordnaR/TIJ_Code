@@ -1,0 +1,9 @@
+package deadlock;
+
+public class DeadLockPhilosophers {
+
+	public static void main(String[] args) {
+
+		int phoSize = 5; // 哲学家人数 = 筷子总数
+	}
+}

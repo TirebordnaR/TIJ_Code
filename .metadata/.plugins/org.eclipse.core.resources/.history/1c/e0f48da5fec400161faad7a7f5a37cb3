@@ -1,0 +1,8 @@
+package deadlock;
+
+public class DeadLockPhilosophers {
+
+	public static void main(String[] args) {
+
+	}
+}

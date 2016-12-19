@@ -1,0 +1,27 @@
+ExecutorService exec = Executors.newCachedThreadPool( new DaemonThreadFactory() );
+Runnable r = new DaemonFromFactory();
+exec.execute( r );
+
+execute(Runnable command) //command = r
+	-->addWorker(command, false) //command = r	
+		-->Worker w = null;
+           w = new Worker(firstTask); //firstTask = r	
+				-->Worker(Runnable firstTask) //firstTask = r	
+						this.firstTask = firstTask; //this.firstTask = r	
+						//这里会调用newCachedThreadPool( new DaemonThreadFactory() )的Factory即DaemonThreadFactory
+						//同时调用被重写的newThread()方法
+						//这里的this是当前的Worker
+            		   	this.thread = getThreadFactory().newThread(this);
+            		   		public class DaemonThreadFactory implements ThreadFactory {
+								@Override
+								public Thread newThread(Runnable r) {	// r = Worker Worker里面包含有
+									Thread t = new Thread( r );
+									t.setDaemon( true );
+									return t;
+								}
+							}	
+			w.firstTask = r
+			w.thread = 当前Worker
+			workers.add(w);	
+						
+							           final Thread t = w.thread;
