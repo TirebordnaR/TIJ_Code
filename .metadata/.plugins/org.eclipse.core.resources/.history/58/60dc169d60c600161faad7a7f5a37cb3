@@ -1,0 +1,99 @@
+package serialize;
+
+import java.io.Externalizable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
+// 实现Externalizable接口时需要重写writeExternal/readExternal方法
+// 在这2个方法里面,可以做别的处理
+// 注意：构造器必须有一个是public的且无参数
+
+// 与实现接口Serializable不同的是,实现Externalizable接口会首先调用构造器(包括字段定义的初始化)
+// 然后才调用readExternal,而实现Serializable接口的反序列化会直接以对象存储的二进制位来构造
+class Apple1 implements Externalizable {
+
+	// 实现Externalizable接口时,必须具有默认构造器,并且必须是public的
+	int val;
+	String s = null;
+
+	public Apple1() {
+		System.out.println( "Apple1 cons...." );
+	}
+
+	public Apple1(int val, String s) {
+		System.out.println( "Apple1 cons...." );
+		this.val = val;
+		this.s = s;
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		System.out.println( "Apple1 writeExternal...." );
+		// 完整的写入对象
+		out.writeInt( val );
+		out.writeObject( s );
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		
+		System.out.println( "Apple1 readExternal...." );
+		
+		// 完整的读出对象,因为构造器不对字段初始化,因此这里手动恢复对象的字段
+		val = in.readInt();
+		s = (String) in.readObject();
+	}
+
+	@Override
+	public String toString() {
+		return val + ":" + s;
+	}
+
+}
+
+class Apple2 implements Externalizable {
+	// 实现Externalizable接口时,必须具有默认构造器(即无参),并且必须是public的
+	// 试图不写构造器是行不通的
+	public Apple2() {
+		System.out.println( "Apple2 cons...." );
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput out) throws IOException {
+		System.out.println( "Apple2 writeExternal...." );
+	}
+
+	@Override
+	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+		System.out.println( "Apple2 readExternal...." );
+	}
+
+}
+
+public class ApplesExternalizable {
+	public static void main(String[] args) throws Exception {
+		FileOutputStream fos = new FileOutputStream( "out" );
+		ObjectOutputStream oos = new ObjectOutputStream( fos );
+
+		Apple1 a1 = new Apple1( 1, "Apple1" );
+		Apple2 a2 = new Apple2();
+
+		oos.writeObject( a1 );
+		oos.writeObject( a2 );
+
+		FileInputStream fis = new FileInputStream( "out" );
+		ObjectInputStream ois = new ObjectInputStream( fis );
+		a1 = (Apple1) ois.readObject();
+		a2 = (Apple2) ois.readObject();
+		System.out.println( a1 );
+		System.out.println( a2 );
+
+		oos.close();
+		ois.close();
+	}
+}

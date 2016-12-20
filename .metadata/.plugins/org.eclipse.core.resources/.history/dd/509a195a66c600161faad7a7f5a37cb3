@@ -1,0 +1,25 @@
+package serialize;
+
+import java.io.Serializable;
+
+public class SerialObjectNet {
+
+}
+
+class House implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+}
+
+class Animal implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private String name;
+	private House house;
+
+	public Animal(String name, House house) {
+		this.name = name;
+		this.house = house;
+	}
+
+}

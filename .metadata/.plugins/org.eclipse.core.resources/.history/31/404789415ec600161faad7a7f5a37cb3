@@ -1,0 +1,15 @@
+package stdio;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class ChangeSystemOut
+{
+	public static void main( String[] args ) throws IOException
+	{
+		// 第二个参数设置true,开启自动flush功能,否则需要手动flush()
+		PrintWriter out = new PrintWriter( System.out, false );
+		out.println( "hello" );
+		//out.flush();
+	}
+}

@@ -1,0 +1,54 @@
+package serialize;
+
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+//一般来说,只需要实现Serializable接口就可以实现序列化
+//创建一个OutputStream对象,然后用ObjectOutputStream来封装它,调用writeObject来序列化对象
+//序列化的时候使用单一的流,这样可以恢复出与写入时的对象关系网
+//通过一个字节数组来使用对象序列化,可以对实现Serializable接口的对象进行深度复制
+class Alien implements Serializable
+{
+	private static final long serialVersionUID = 1L;
+
+	// 只有normal才能被序列化
+	// static字段属于类,不属于某个对象,无法被序列化,除非自己手动实现
+	// transient直接禁止序列化
+	private static String username = "wl";
+	transient String passwd = "12345";
+	private String normal = null;
+
+	public Alien( String username, String passwd, String normal )
+	{
+		this.passwd = passwd;
+		Alien.username = username;
+		this.normal = normal;
+	}
+
+	@Override
+	public String toString()
+	{
+		return username + ":" + passwd + ":" + normal;
+	}
+
+	public void dosomething()
+	{
+		System.out.println( "hello" );
+	}
+}
+
+public class FreezeAlien
+{
+	public static void main( String[] args ) throws Exception
+	{
+		// 序列化对象到文件
+		FileOutputStream fos = new FileOutputStream( "Alien" );
+		ObjectOutputStream oos = new ObjectOutputStream( fos );
+		Alien a1 = new Alien( "ll", "P1111", "N11" );
+		Alien a2 = new Alien( "22", "P2222", "N22" );
+		oos.writeObject( a1 );
+		oos.writeObject( a2 );
+		oos.close();
+	}
+}

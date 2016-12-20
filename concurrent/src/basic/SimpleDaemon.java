@@ -1,6 +1,5 @@
 package basic;
 
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 // 后台线程是可有可无的,因此只要非后台线程都退出了,那么后台线程就被自动杀死

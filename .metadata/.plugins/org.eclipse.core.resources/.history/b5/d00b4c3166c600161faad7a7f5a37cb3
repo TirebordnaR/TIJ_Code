@@ -1,0 +1,11 @@
+package serialize;
+
+import java.io.Serializable;
+
+public class SerialObjectNet {
+
+}
+
+class Animal implements Serializable{
+	
+}

@@ -1,0 +1,33 @@
+package serialize;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class SerialObjectNet {
+	
+	public static void main(String[] args) {
+		House h = new House();
+	}
+}
+
+class House implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+}
+
+class Animal implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private String name;
+	private House house;
+
+	public Animal(String name, House house) {
+		this.name = name;
+		this.house = house;
+	}
+	
+	@Override
+	public String toString() {
+		return name + "[" + house + "]";
+	}
+}

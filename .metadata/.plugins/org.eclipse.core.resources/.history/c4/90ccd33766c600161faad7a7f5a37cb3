@@ -1,0 +1,14 @@
+package serialize;
+
+import java.io.Serializable;
+
+public class SerialObjectNet {
+
+}
+
+class House implements Serializable{
+	
+}
+class Animal implements Serializable{
+	
+}
