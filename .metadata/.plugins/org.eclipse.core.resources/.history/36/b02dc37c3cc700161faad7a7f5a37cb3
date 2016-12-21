@@ -1,0 +1,13 @@
+package basic;
+
+public class EnumEnumInterface {
+
+}
+
+enum Meal{
+	APPETIZE;
+	
+	public interface Food{
+		enum
+	}
+}

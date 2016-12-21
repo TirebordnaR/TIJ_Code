@@ -1,0 +1,38 @@
+package basic;
+
+
+public class EnumEnumInterface {
+	public static void main(String[] args) {
+		
+	}
+}
+
+enum Meal {
+	
+	APPETIZE(Food.Appetizer.class),
+	MAINCOURSE(Food.MainCourse.class),
+	COFFE(Food.Coffe.class);
+	
+	private Food[] foods;
+	Meal(Class<? extends Food> kind ){
+		foods = kind.getEnumConstants();
+	}
+	
+	public Food randomSelection(){
+		return Enums.random( foods );
+	}
+	
+	public interface Food {
+		enum Appetizer implements Food {
+			SALAD, SOUP
+		}
+
+		enum MainCourse implements Food {
+			LASAGNE, GELATO
+		}
+
+		enum Coffe implements Food {
+			TEA, LATTE
+		}
+	}
+}

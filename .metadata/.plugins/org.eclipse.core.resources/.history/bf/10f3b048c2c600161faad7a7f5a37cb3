@@ -1,0 +1,8 @@
+package basic;
+
+public enum EnumWithMethod {
+	WEST("This is WEST"),
+	NORTH("This is North"),
+	EAST("This is North"),
+	NORTH("This is North"),
+}

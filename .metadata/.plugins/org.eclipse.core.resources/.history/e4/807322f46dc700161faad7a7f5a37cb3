@@ -1,0 +1,14 @@
+package basic;
+
+import java.lang.reflect.Method;
+
+public class UseCaseTracker {
+
+	public static void main(String[] args) {
+
+		Class<?> c = PassWordUtils.class;
+		for( Method m : c.getDeclaredMethods() ) {
+			UseCase uc = m.getAnnotation( UseCase.class );
+		}
+	}
+}

@@ -1,0 +1,27 @@
+package basic;
+
+public class EnumEnumInterface {
+
+}
+
+enum Meal {
+	APPETIZE;
+	
+	private Food[] foods;
+	Meal(Class<? extends Food> kind ){
+		foods = kind.getEnumConstants();
+	}
+	public interface Food {
+		enum Appetizer implements Food {
+			SALAD, SOUP
+		}
+
+		enum MainCourse implements Food {
+			LASAGNE, GELATO
+		}
+
+		enum Coffe implements Food {
+			TEA, LATTE
+		}
+	}
+}

@@ -1,0 +1,5 @@
+package enummap;
+
+public enum ConstantSpecificMethod {
+
+}

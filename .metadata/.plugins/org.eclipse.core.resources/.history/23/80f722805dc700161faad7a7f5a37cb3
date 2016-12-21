@@ -1,0 +1,44 @@
+package multidispatching;
+
+import java.util.Random;
+
+import basic.Enums;
+
+public enum RoShamBo2{
+	
+	Paper(Outcome.DRAW,Outcome.LOSE,Outcome.WIN),
+	Scissors(Outcome.WIN,Outcome.DRAW,Outcome.LOSE),
+	Rock(Outcome.LOSE,Outcome.WIN,Outcome.DRAW);
+	 
+	private Outcome vPaper, vScissors, vRock;
+	// 枚举的构造器
+	private RoShamBo2(Outcome vPaper, Outcome vScissors, Outcome vRock) {
+		this.vPaper = vPaper;
+		this.vScissors = vScissors;
+		this.vRock = vRock;
+	}
+	
+	public Outcome compete(RoShamBo2 that) {
+		switch( that ){
+		case Paper:
+			return this.vPaper;
+		case Scissors:
+			return this.vScissors;
+		case Rock:
+			return this.vRock;
+		default:
+			throw new RuntimeException();
+		}
+	}
+	
+	public static void main(String[] args) {
+		for( int i = 0; i < 20; i++ ) {
+			RoShamBo2 a = Enums.random( RoShamBo2.class );
+			RoShamBo2 b = Enums.random( RoShamBo2.class );
+			System.out.println( a + " vs " + b + ":" + a.compete( b ) );
+		}
+	}
+
+}
+
+

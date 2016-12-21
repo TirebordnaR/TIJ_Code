@@ -1,0 +1,14 @@
+package multidispatching;
+
+// 多路分发
+public class RoShamBo1 {
+
+}
+
+enum Outcome{WIN,LOSE,DRAW}
+interface Item{
+	Outcome compete(Item it);
+	Outcome eval(Paper p);
+	Outcome eval(Scissors p);
+	Outcome eval(Rock p);
+}

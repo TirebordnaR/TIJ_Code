@@ -1,0 +1,17 @@
+package basic;
+
+import java.util.Random;
+
+// 从枚举实例中随机选取一个值
+public class Enums {
+
+	private static Random rand = new Random( 67 );
+
+	public <T extends Enum<T>> T random(Class<T> enumClass) {
+		return random( enumClass.getEnumConstants() );
+	}
+
+	public static T random(T[] enumConstants) {
+		return enumConstants[rand.nextInt( enumConstants. )];
+	}
+}

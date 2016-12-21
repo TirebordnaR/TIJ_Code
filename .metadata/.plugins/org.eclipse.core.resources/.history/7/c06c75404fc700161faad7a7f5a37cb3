@@ -1,0 +1,143 @@
+package enummap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import basic.Enums;
+
+// 用enum实现责任链
+public class PostOffice {
+
+	public static void main(String[] args) {
+
+		// 随机产生N封邮件
+		List<Mail> mails = new ArrayList<>();
+		for( int i = 0; i < 10; i++ ) {
+			mails.add( Mail.randomMail() );
+		}
+
+		for( Mail m : mails ) {
+			for( MailHandler h : MailHandler.values() ) {
+				if ( h.handle( m ) )
+					break;
+				System.out.println( m + " is a DEAL letter!" );
+			}
+			System.out.println( "*******************" );
+		}
+	}
+
+	public static handle(Mali m){
+		
+	}
+	enum MailHandler {
+		// 通用方式
+		GENERAL {
+			boolean handle(Mail m) {
+				switch( m.generalDelivery ){
+				case YES:
+					System.out.println( "GENERAL: " + m );
+					return true;
+				default:
+					return false;
+				}
+			}
+		},
+		// 机器扫描
+		MACHINE_SCAN {
+			boolean handle(Mail m) {
+				switch( m.sannability ){
+				case UNSACNNABLE:
+					return false;
+				default: {
+					switch( m.addresss ){
+					case UNKONWNADDRESS:
+						return false;
+					default:
+						System.out.println( "MACHINE_SCAN " + m );
+						return true;
+					}
+				}
+				}
+			}
+		},
+		// 视觉识别
+		VISUAL_INSPECT {
+			boolean handle(Mail m) {
+				switch( m.readability ){
+				case UNREADABLE:
+					return false;
+				default: {
+					switch( m.addresss ){
+					case UNKONWNADDRESS:
+						return false;
+					default:
+						System.out.println( "VISUAL_INSPECT: " + m );
+						return true;
+					}
+				}
+				}
+			}
+		},
+		RETURN_TO_SENDER {
+			@Override
+			boolean handle(Mail m) {
+				switch( m.returnAddress ){
+				case MISSING:
+					return false;
+				default:
+					System.out.println( "RETURN_TO_SENDER: " + m );
+					return true;
+				}
+			}
+		};
+		abstract boolean handle(Mail m);
+	}
+
+}
+
+class Mail {
+	enum GeneralDelivery {
+		YES, NO1, NO2, No3, NO4
+	}
+
+	enum Sannability {
+		UNSACNNABLE, YES1, YES2, YES3, YES4
+	}
+
+	enum Readability {
+		UNREADABLE, YES1, YES2, YES3, YES4
+	}
+
+	enum Addresss {
+		UNKONWNADDRESS, OK1, OK2, OK3, OK4
+	}
+
+	enum ReturnAddress {
+		MISSING, OK1, OK2, OK3, OK4
+	}
+
+	GeneralDelivery generalDelivery;
+	Sannability sannability;
+	Readability readability;
+	Addresss addresss;
+	ReturnAddress returnAddress;
+
+	static int count = 0;
+	final int id = count++;
+
+	@Override
+	public String toString() {
+		return "MAIL:" + id + "[" + generalDelivery + "," + sannability + "," + readability + "," + addresss + ","
+				+ returnAddress + "]";
+	}
+
+	public static Mail randomMail() {
+		Mail m = new Mail();
+		m.generalDelivery = Enums.random( GeneralDelivery.class );
+		m.sannability = Enums.random( Sannability.class );
+		m.readability = Enums.random( Readability.class );
+		m.addresss = Enums.random( Addresss.class );
+		m.returnAddress = Enums.random( ReturnAddress.class );
+		return m;
+	}
+}

@@ -1,0 +1,12 @@
+package basic;
+
+public class UseCaseTracker {
+
+	public static void main(String[] args) {
+
+		Class<?> c = PassWordUtils.class;
+		for( Method m : c.getDeclaredClasses() ) {
+
+		}
+	}
+}

@@ -1,0 +1,5 @@
+package multidispatching;
+
+public enum RoShamBo2 {
+
+}

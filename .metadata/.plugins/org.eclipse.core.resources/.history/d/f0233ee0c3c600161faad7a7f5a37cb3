@@ -1,0 +1,25 @@
+package basic;
+
+public enum EnumWithMethod {
+	// enum实例必须在前面
+	WEST("This is WEST"), 
+	NORTH("This is North"), 
+	EAST("This is EAST"), 
+	SOUTH("This is South");
+
+	private String description;
+
+	EnumWithMethod(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public static void main(String[] args) {
+		for(EnumWithMethod e : EnumWithMethod.values()){
+			System.out.println( e + ":" + e.getDescription() );
+		}
+	}
+}

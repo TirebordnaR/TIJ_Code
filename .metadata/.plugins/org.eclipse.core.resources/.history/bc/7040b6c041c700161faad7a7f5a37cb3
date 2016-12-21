@@ -1,0 +1,30 @@
+package enummap;
+
+import java.util.EnumMap;
+
+public class EnumMapDemo {
+	public static void main(String[] args) {
+		EnumMap<AlarmPoints, Command> em = new EnumMap<>( AlarmPoints.class );
+		em.put( AlarmPoints.KITCHEN, new Command() {
+			@Override
+			public void action() {
+				System.out.println( " in kitchen...." );
+			}
+		} );
+		
+		em.put( AlarmPoints.LOBBY, new Command() {
+			@Override
+			public void action() {
+				System.out.println( " in LOBBY...." );
+			}
+		} );
+	}
+}
+
+interface Command {
+	void action();
+}
+
+enum AlarmPoints {
+	STATIR1, STATIR2, LOBBY, OFFICE1, OFFICE2, OFFICE3, KITCHEN
+}

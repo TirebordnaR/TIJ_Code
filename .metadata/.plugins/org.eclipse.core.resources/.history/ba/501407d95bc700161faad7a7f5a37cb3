@@ -1,0 +1,29 @@
+package multidispatching;
+
+public enum RoShamBo2 implements Competitor<RoShamBo2>{
+	Paper(Outcome.DRAW,Outcome.LOSE,Outcome.WIN),
+	Scissors(Outcome.DRAW,Outcome.LOSE,Outcome.WIN),
+	Rock(Outcome.DRAW,Outcome.LOSE,Outcome.WIN);
+	
+	private RoShamBo2(Outcome vPaper, Outcome vScissors, Outcome vRock) {
+		
+	}
+	
+	@Override
+	public Outcome match(Competitor<RoShamBo2> that) {
+		switch( key ){
+		case value:
+			
+			break;
+
+		default:
+			break;
+		}
+	}
+
+}
+
+interface Competitor<T extends Competitor<T>>{
+	Outcome match(Competitor<T> that);
+}
+

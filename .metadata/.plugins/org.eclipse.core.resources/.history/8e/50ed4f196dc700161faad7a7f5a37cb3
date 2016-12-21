@@ -1,0 +1,8 @@
+package basic;
+
+public class PassWordUtils {
+
+	 public boolean validate(String passwd){
+		 return passwd.equals( "123" );
+	 }
+}

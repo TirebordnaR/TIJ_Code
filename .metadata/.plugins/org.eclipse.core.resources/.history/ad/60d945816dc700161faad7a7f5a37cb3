@@ -1,0 +1,8 @@
+package basic;
+
+public class UserCaseTracker {
+	
+	public static void trackUseCase(){
+		
+	}
+}

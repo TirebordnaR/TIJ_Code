@@ -1,0 +1,16 @@
+package basic;
+
+public class EnumClass {
+	public static void main(String[] args) {
+
+		for( Color c : Color.values() ) {
+			System.out.println( c.ordinal() );
+			System.out.println( c.compareTo( Color.BLUE ) );
+			System.out.println( c.equals(  Color.BLUE ) );
+		}
+	}
+}
+
+enum Color {
+	RED, BLUE, BLACK
+}

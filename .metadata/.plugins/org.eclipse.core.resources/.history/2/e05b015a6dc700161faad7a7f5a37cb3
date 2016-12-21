@@ -1,0 +1,9 @@
+package basic;
+
+public class PassWordUtils {
+
+	@UseCase(id=67,description="passwd is 123")
+	 public boolean validate(String passwd){
+		 return passwd.equals( "123" );
+	 }
+}

@@ -1,0 +1,55 @@
+package enummap;
+
+import basic.Enums;
+
+// 用enum实现责任链
+public class PostOffice {
+
+}
+
+class Mail {
+	enum GeneralDelivery {
+		YES, NO1, NO2, No3, NO4
+	}
+
+	enum Sannability {
+		UNSACNNABLE, YES1, YES2, YES3, YES4
+	}
+
+	enum Readability {
+		UNREADABLE, YES1, YES2, YES3, YES4
+	}
+
+	enum Addresss {
+		UNKONWNADDRESS, OK1, OK2, OK3, OK4
+	}
+
+	enum ReturnAddress {
+		MISSING, OK1, OK2, OK3, OK4
+	}
+
+	GeneralDelivery generalDelivery;
+	Sannability sannability;
+	Readability readability;
+	Addresss addresss;
+	ReturnAddress returnAddress;
+
+	static int count = 0;
+	static int id = count++;
+
+	@Override
+	public String toString() {
+		return "MAIL:" + id + "[" + generalDelivery + sannability + readability + addresss + returnAddress + "]";
+	}
+
+	public static Mail randomMail
+	{
+		Mail m = new Mail();
+		m.generalDelivery = Enums.random( GeneralDelivery.class );
+		m.sannability = Enums.random( Sannability.class );
+		m.readability = Enums.random( Readability.class );
+		m.addresss = Enums.random( Addresss.class );
+		m.returnAddress = Enums.random( ReturnAddress.class );
+		return m;
+	}
+}

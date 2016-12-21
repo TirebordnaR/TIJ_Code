@@ -1,0 +1,15 @@
+package basic;
+
+public enum EnumWithMethod {
+	private String description;
+	WEST("This is WEST"), 
+	NORTH("This is North"), 
+	EAST("This is EAST"), 
+	SOUTH("This is South");
+
+
+
+	EnumWithMethod(String description) {
+		this.description = description;
+	}
+}

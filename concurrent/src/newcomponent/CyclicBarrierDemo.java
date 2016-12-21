@@ -47,6 +47,7 @@ public class CyclicBarrierDemo {
 			for( Horse h : horses )
 				System.out.println( h.track() );
 
+			// 如果有马到达终点,结束所有线程
 			for( Horse h : horses ) {
 				if ( h.getDistance() >= TARGET_DISTANCE ) {
 					System.out.println( h + " WIN !" );

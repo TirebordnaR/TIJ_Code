@@ -1,0 +1,9 @@
+package enummap;
+
+public class EnumMapDemo {
+
+}
+
+interface Command {
+	void action();
+}

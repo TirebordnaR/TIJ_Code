@@ -1,0 +1,114 @@
+package multidispatching;
+
+import java.util.Random;
+
+// 多路分发
+public class RoShamBo1 {
+	public static void main(String[] args) {
+		int ROUND = 20;
+
+	}
+
+	static Random rand = new Random( 67 );
+
+	public static void match(Item a, Item b) {
+		System.out.println( a + " vs " + b + ":" + a.compete( b ) );
+	}
+
+	public static Item newItem() {
+		switch( rand.nextInt( 3 ) ){
+		case 0:
+			return new Paper();
+		case 1:
+			return new Scissors();
+		case 2:
+			return new Rock();
+		default:
+			throw new RuntimeException();
+		}
+	}
+}
+
+enum Outcome {
+	WIN, LOSE, DRAW
+}
+
+interface Item {
+	Outcome compete(Item it);
+
+	Outcome eval(Paper p);
+
+	Outcome eval(Scissors p);
+
+	Outcome eval(Rock p);
+}
+
+class Paper implements Item {
+
+	@Override
+	public Outcome compete(Item it) {
+		return it.eval( this );
+	}
+
+	@Override
+	public Outcome eval(Paper p) {
+		return Outcome.DRAW;
+	}
+
+	@Override
+	public Outcome eval(Scissors p) {
+		return Outcome.WIN;
+	}
+
+	@Override
+	public Outcome eval(Rock p) {
+		return Outcome.LOSE;
+	}
+
+}
+
+class Scissors implements Item {
+
+	@Override
+	public Outcome compete(Item it) {
+		return it.eval( this );
+	}
+
+	@Override
+	public Outcome eval(Paper p) {
+		return Outcome.DRAW;
+	}
+
+	@Override
+	public Outcome eval(Scissors p) {
+		return Outcome.WIN;
+	}
+
+	@Override
+	public Outcome eval(Rock p) {
+		return Outcome.LOSE;
+	}
+}
+
+class Rock implements Item {
+
+	@Override
+	public Outcome compete(Item it) {
+		return it.eval( this );
+	}
+
+	@Override
+	public Outcome eval(Paper p) {
+		return Outcome.DRAW;
+	}
+
+	@Override
+	public Outcome eval(Scissors p) {
+		return Outcome.WIN;
+	}
+
+	@Override
+	public Outcome eval(Rock p) {
+		return Outcome.LOSE;
+	}
+}

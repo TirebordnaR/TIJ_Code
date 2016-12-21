@@ -1,0 +1,9 @@
+package multidispatching;
+
+public enum RoShamBo2 implements Competitor<RoShamBo2>{
+
+}
+
+interface Competitor<T extends Competitor<T>>{
+	Outcome match(RoShamBo2 that){}
+}

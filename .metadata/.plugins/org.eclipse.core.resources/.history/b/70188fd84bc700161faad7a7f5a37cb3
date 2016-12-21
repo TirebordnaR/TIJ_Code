@@ -1,0 +1,20 @@
+package enummap;
+
+// 用enum实现责任链
+public class PostOffice {
+
+}
+
+class Mail {
+	enum GeneralDelivery{YES, NO1, NO2, No3, NO4}
+	enum Sannability{UNSACNNABLE,YES1, YES2, YES3, YES4}
+	enum Readability{UNREADABLE,YES1, YES2, YES3, YES4}
+	enum Addresss{UNKONWNADDRESS,OK1, OK2, OK3, OK4}
+	enum ReturnAddress{MISSING,OK1, OK2, OK3, OK4}
+	
+	GeneralDelivery generalDelivery;
+	Sannability sannability;
+	Readability readability;
+	Addresss addresss;
+	ReturnAddress returnAddress;
+}

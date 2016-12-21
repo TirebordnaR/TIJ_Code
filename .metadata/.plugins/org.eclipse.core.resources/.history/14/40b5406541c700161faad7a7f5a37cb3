@@ -1,0 +1,13 @@
+package enummap;
+
+import java.util.EnumMap;
+
+public class EnumMapDemo {
+	public static void main(String[] args) {
+		EnumMap<AlarmPoint, V>
+	}
+}
+
+interface Command {
+	void action();
+}

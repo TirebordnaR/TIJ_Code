@@ -1,0 +1,16 @@
+package multidispatching;
+
+public enum RoShamBo2 implements Competitor<RoShamBo2>{
+	;
+
+	@Override
+	public Outcome match(Competitor<RoShamBo2> that) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
+
+interface Competitor<T extends Competitor<T>>{
+	Outcome match(Competitor<T> that);
+}

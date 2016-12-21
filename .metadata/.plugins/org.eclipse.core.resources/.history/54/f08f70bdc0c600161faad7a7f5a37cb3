@@ -1,0 +1,11 @@
+package basic;
+
+public class EnumClass {
+
+}
+
+enum Color{
+	RED,
+	BLUE,
+	BLACK
+}

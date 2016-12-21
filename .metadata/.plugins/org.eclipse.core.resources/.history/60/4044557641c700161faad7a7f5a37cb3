@@ -1,0 +1,17 @@
+package enummap;
+
+import java.util.EnumMap;
+
+public class EnumMapDemo {
+	public static void main(String[] args) {
+		EnumMap<AlarmPoint, V>
+	}
+}
+
+interface Command {
+	void action();
+}
+
+enum AlarmPoints {
+	STATIR1, STATIR2, LOBBY, OFFICE1, OFFICE2, OFFICE3, KITCHEN
+}
